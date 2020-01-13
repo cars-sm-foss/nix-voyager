@@ -2,8 +2,8 @@
 
 buildArguments(){
     echo -n "--arg storePath \"$STORE_PATH\" "
-    for arg_name in $UNHOLY_ARGUMENTS; do
-	    varname="UNHOLY_ARG_$arg_name"
+    for arg_name in $NIXVOYAGER_ARGUMENTS; do
+	    varname="NIXVOYAGER_ARG_$arg_name"
 	    # the trailing space is VERY important
 	    # the value of the environment variable must be already properly
 	    # quoted depending on the type of value
@@ -15,8 +15,8 @@ if (! test -x $OUTPUT_DIR); then
     mkdir -p $OUTPUT_DIR
 fi
 
-# load the nix environment variables
-. .bash_profile
 
 set -eu
-nix-build $(buildArguments)  $UNHOLY_EXPRESSION -A all  -o $RESULT_LINK
+
+# call the main build script
+/nixvoyager-script.sh
