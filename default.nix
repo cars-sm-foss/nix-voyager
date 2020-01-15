@@ -1,6 +1,6 @@
-{ pkgs, callPackage }:
+{ pkgs ? import <nixpkgs> {} }:
 let
-   #callPackage = pkgs.lib.callPackageWith (pkgs // self);
+   callPackage = pkgs.lib.callPackageWith (pkgs // self);
 
    version = "0.1";
 
