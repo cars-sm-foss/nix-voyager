@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage, base }:
 {
-  mkDockerBuild = callPackage ./base-builder.nix {};
+  mkDockerBuild = callPackage ./base-builder.nix { inherit base; };
 }
