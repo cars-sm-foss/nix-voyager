@@ -5,5 +5,4 @@ let
   docker = callPackage ./docker { base=base; };
 
 in
- # add a reference for mere convenience for pkgs
- { inherit pkgs; } // base // python // docker
+ base // python // docker
