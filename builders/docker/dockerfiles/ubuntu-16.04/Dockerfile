@@ -8,6 +8,13 @@ RUN useradd --comment "nix-voyager build user" \
             --create-home $USER \
             --shell /bin/bash
 
+
+# locale settings so ascii isn't the system-wide default
+RUN apt-get update && apt-get install -y locales locales-all
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
 # install lsb-release so that the virtualenvs can obtain the system
 # information and ca-certificate in case we try to fetch something
 # from the network and is using https (like pip)

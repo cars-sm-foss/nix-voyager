@@ -5,10 +5,10 @@ set -eu
 
 echo "Beginning setup for virtualenv build"
 VIRTUALENV_TAR=/home/nixvoyager-user/virtualenv
-RESULT=/home/nixvoyager-user/exports
+RESULT=/home/nixvoyager-user/output/result
 
 mkdir $VIRTUALENV_TAR
-mkdir $RESULT
+mkdir -p $RESULT
 
 # TODO: we should not assume --strip 1 here, but it works
 # with all recent virtualenv distributions
