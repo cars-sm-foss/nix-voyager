@@ -6,9 +6,10 @@ set -eu
 echo "Beginning setup for building python wheel(s)"
 
 WHEELDIR=/home/nixvoyager-user/wheel
-RESULT=/home/nixvoyager-user/exports
+RESULT=/home/nixvoyager-user/output/result
 VIRTUALENV_TAR=/home/nixvoyager-user/virtualenv
-mkdir $RESULT
+
+mkdir -p $RESULT
 mkdir $WHEELDIR
 mkdir $VIRTUALENV_TAR
 
@@ -16,9 +17,25 @@ mkdir $VIRTUALENV_TAR
 # with all recent virtualenv distributions
 cd $VIRTUALENV_TAR
 tar -xf $NIXVOYAGER_ARG_virtualEnvSrc --strip 1
-$systemPython $VIRTUALENV_TAR/virtualenv.py _env/
-source _env/bin/activate
+$systemPython $VIRTUALENV_TAR/virtualenv.py --never-download _env/
 
+# ran into issues with some virtualenv versions setting the prompt in a container.
+# disabling it completely since we don't need it
+VIRTUAL_ENV_DISABLE_PROMPT=1 source _env/bin/activate
+
+# make sure we use pip to pre-install any build dependencies needed to build the wheels
+for python_build_dep in $(echo $NIXVOYAGER_ARG_pythonBuildDependencies | tr ':' ' ')
+do
+  # the assumption for now is we either have a directory of whl files (i.e. the output
+  # from another package using `mkPythonWheel`), or we have an installable source of some
+  # kind (e.g. a `fetchurl { }` containing a python dist of anything pip installable)
+  if [ -d $python_build_dep ];
+    then
+      pip install $python_build_dep/*.whl --no-deps --no-index
+    else
+      pip install $python_build_dep --no-deps --no-index
+    fi
+done
 
 cd $WHEELDIR
 
